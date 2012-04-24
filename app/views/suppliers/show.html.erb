@@ -1,0 +1,47 @@
+<%- model_class = @supplier.class -%>
+<h1><%=t '.title', :default => model_class.model_name.human %></h1>
+
+<p>
+  <strong><%= model_class.human_attribute_name(:name) %>:</strong><br>
+  <%= @supplier.name %>
+</p>
+
+<div class="well">
+  <h2>Ingredients</h2>
+  <table class="table table-striped table-bordered">
+    <thead>
+      <th>Nome</th>
+      <th><!-- actions --></th>
+      <tbody>
+        <% @supplier.ingredients.each do |ingredient|%>
+        <tr>
+          <td><%= ingredient.name %></td>
+          <td><%= link_to "remove", supplier_ingredient_supplier_path(@supplier, ingredient), class: "btn btn-mini btn-danger", method: :delete, confirmation: ' Are you sure?'%></td>
+        </tr>
+        <% end  %>
+      </tbody>
+    </thead>
+  </table>
+  
+  <div class="form-actions">
+  <%= form_tag "/suppliers/#{@supplier.id}/ingredient_supplier/", method: "post" do  %>
+    <%= select_tag :id, options_for_select(
+      Ingredient.all.map {|i| [i.name, i.id]}
+    ) %>
+      <%= submit_tag "Adicionar", class: "btn btn-primary"%>
+  <% end %>
+  </div>
+</div>
+
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              suppliers_path, :class => 'btn'  %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_supplier_path(@supplier), :class => 'btn' %>
+  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              supplier_path(@supplier),
+              :method => 'delete',
+              :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+              :class => 'btn btn-danger' %>
+</div>

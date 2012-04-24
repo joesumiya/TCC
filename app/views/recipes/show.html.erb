@@ -1,0 +1,73 @@
+<%- model_class = @recipe.class -%>
+<h1><%=t '.title', :default => model_class.model_name.human %></h1>
+
+<p>
+  <strong><%= model_class.human_attribute_name(:name) %>:</strong><br>
+  <%= @recipe.name %>
+</p>
+
+<div class="well">
+  <h2>Ingredients</h2>
+  <br />
+  <table class="table table-striped table-bordered">
+    <thead>
+      <th>Nome</th>
+      <th>Quantidade</th>
+      <th><!-- actions --></th>
+    </thead>
+    <tbody>
+    <% @recipe.items.each do |item| %>
+    <tr>
+      <td><%= item.storable.name %></td>
+      <td><%= item.human_quantity %></td>
+      <td>
+        <%= link_to "edit", edit_recipe_recipe_item_path(@recipe, item), class: "btn btn-mini btn-primary" %>
+        <%= link_to "delete", recipe_recipe_item_path(@recipe, item), class: 'btn btn-mini btn-danger', method: :delete, confirm: "Are you sure?"%>
+        
+      </td>
+    </tr>
+    <% end %>
+    </tbody>
+  </table>
+  <div class="form-actions">
+    <%= link_to "Novo Ingrediente", new_recipe_recipe_item_path(@recipe),  class: "btn btn-primary"%>
+  </div>
+</div>
+
+<div class="well">
+  <h2>Directions</h2>
+  
+  <table class="table table-striped table-bordered">
+    <thead>
+      <th>Content</th>
+      <th><!-- actions --></th>
+    </thead>
+    <tbody>
+    <% @recipe.steps.each do |step| %>
+    <tr>
+      <td><%= step.content %></td>
+      <td>
+        <%= link_to "edit", edit_recipe_recipe_step_path(@recipe, step), class: 'btn btn-mini  btn-primary' %>
+        <%= link_to "delete", recipe_recipe_step_path(@recipe, step), method: :delete, confirm: 'Are you sure?', class: 'btn btn-mini btn-danger'%>
+      </td>
+    </tr>
+    <% end %>
+    </tbody>
+  </table>
+  
+  <div class="form-actions">
+    <%= link_to "New Step", new_recipe_recipe_step_path(@recipe), class: "btn btn-primary "%>
+  </div>
+</div>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              recipes_path, :class => 'btn'  %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_recipe_path(@recipe), :class => 'btn' %>
+  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              recipe_path(@recipe),
+              :method => 'delete',
+              :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+              :class => 'btn btn-danger' %>
+</div>
